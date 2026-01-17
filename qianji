@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+VENV_ACTIVATE="${VENV_ACTIVATE:-$HOME/venv/huzhe/bin/activate}"
+
+if [[ $# -eq 0 || "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  cat <<'EOF'
+用法:
+  qianji /绝对路径/账单.csv [--bank hsbc|bea|auto] [--output-dir /绝对路径/输出目录]
+
+说明:
+  - 需要输入账单 CSV 的绝对路径
+  - --bank 默认 auto，会根据表头自动识别
+  - 默认输出目录: /Users/huzhe/playground/hsbc2qianji/output
+
+示例:
+  qianji /Users/huzhe/playground/hsbc2qianji/data/TransactionHistory.csv
+  qianji /Users/huzhe/playground/hsbc2qianji/data/BEA.csv --bank bea
+  qianji /Users/huzhe/playground/hsbc2qianji/data/HSBC.csv --output-dir /Users/huzhe/Desktop
+EOF
+  exit 0
+fi
+
+if [[ ! -f "$VENV_ACTIVATE" ]]; then
+  echo "未找到虚拟环境激活脚本: $VENV_ACTIVATE" >&2
+  echo "请确认路径或通过 VENV_ACTIVATE 环境变量指定。" >&2
+  exit 1
+fi
+
+source "$VENV_ACTIVATE"
+exec python "$SCRIPT_DIR/qianji_cli.py" "$@"

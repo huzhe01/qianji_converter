@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>账单转钱迹</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>账单转钱迹</h1>
+      <p class="subtitle">
+        全程在浏览器本地处理，不上传服务器。转换完成后直接下载 CSV。
+      </p>
+
+      <section class="card">
+        <h2>HSBC 账单转换</h2>
+        <p class="hint">支持 CSV 文件，字段包含 Transaction date / Billing amount。</p>
+        <div class="actions">
+          <input id="hsbcFile" type="file" accept=".csv" />
+          <button id="hsbcConvert">转换并下载</button>
+        </div>
+        <p id="hsbcStatus" class="status"></p>
+      </section>
+
+      <section class="card">
+        <h2>BEA 账单转换</h2>
+        <p class="hint">支持 CSV 文件，字段包含 交易日期 / 金額。</p>
+        <div class="actions">
+          <input id="beaFile" type="file" accept=".csv" />
+          <button id="beaConvert">转换并下载</button>
+        </div>
+        <p id="beaStatus" class="status"></p>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+__pycache__/
+.DS_Store
+
+# 本地账单与导出结果（含隐私）
+data/
+output/
