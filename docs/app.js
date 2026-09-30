@@ -29,12 +29,20 @@ function parseDate(value) {
   if (!value) {
     return null;
   }
-  const parts = value.trim().split('/');
-  if (parts.length !== 3) {
+  const text = String(value).trim();
+  // New BEA exports use YYYY/MM/DD; HSBC and older BEA files use DD/MM/YYYY.
+  const yearFirst = text.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/);
+  const dayFirst = text.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (!yearFirst && !dayFirst) {
     return null;
   }
-  const [day, month, year] = parts;
-  if (!day || !month || !year) {
+  const [, year, month, day] = yearFirst || [dayFirst[0], dayFirst[3], dayFirst[2], dayFirst[1]];
+  const yearNumber = Number(year);
+  const monthNumber = Number(month);
+  const dayNumber = Number(day);
+  const leapYear = yearNumber % 4 === 0 && (yearNumber % 100 !== 0 || yearNumber % 400 === 0);
+  const daysInMonth = [31, leapYear ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  if (yearNumber < 1 || monthNumber < 1 || monthNumber > 12 || dayNumber < 1 || dayNumber > daysInMonth[monthNumber - 1]) {
     return null;
   }
   return `${year}/${month.padStart(2, '0')}/${day.padStart(2, '0')} 00:00`;

@@ -44,7 +44,15 @@ def detect_bank_from_headers(headers):
 
 
 def _parse_date(value):
-    return datetime.strptime(value.strip(), '%d/%m/%Y').strftime('%Y/%m/%d %H:%M')
+    text = value.strip()
+    if re.fullmatch(r'\d{4}/\d{1,2}/\d{1,2}', text):
+        date_format = '%Y/%m/%d'
+    elif re.fullmatch(r'\d{1,2}/\d{1,2}/\d{4}', text):
+        date_format = '%d/%m/%Y'
+    else:
+        raise ValueError(f'Unsupported date format: {text}')
+    date = datetime.strptime(text, date_format)
+    return f'{date.year:04d}/{date.month:02d}/{date.day:02d} 00:00'
 
 
 def _parse_amount(value):
